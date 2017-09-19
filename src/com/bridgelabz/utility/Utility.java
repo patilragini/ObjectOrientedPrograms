@@ -1,11 +1,11 @@
 package com.bridgelabz.utility;
 
+import java.awt.List;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
-
-
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -50,7 +50,10 @@ public class Utility {
 			// after 3rd element rice will repeat
 			for (int i = 0; i < itemarray.length; i++) {
 				System.out.println(j);
+
+				// create object item to add name weight price
 				JSONObject item = new JSONObject();
+
 				System.out.println("Enter data of " + itemarray[i]);
 				System.out.println("Name Of " + itemarray[i]);
 				String name = scanner.next();
@@ -207,51 +210,103 @@ public class Utility {
 		scanner.close();
 		return inventory;
 	}
-	public static String[] initShuffel(){
-        String[] suit = {
-            "Clubs", "Diamonds", "Hearts", "Spades"
-        };
+/**
+ * @return shuffeled String[]
+ * <p>to shuffel of cards 
+ * <p>and return shuffeled deck
+ */
+	public static String[] doShuffel() {
+		String[] suit = { "Clubs", "Diamonds", "Hearts", "Spades" };
+		String[] ranks = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace" };
+		// initialize deck i.e total number of cards 4*13=52
+		int n = suit.length * ranks.length;
 
-        String[] ranks = {
-            "2", "3", "4", "5", "6", "7", "8", "9", "10",
-            "Jack", "Queen", "King", "Ace"
-        };
+		// store shuffel cards
+		String[] deck = new String[n];
+		/*
+		 * 2 of Clubs 2 of Diamonds 2 of Hearts 2 of Spades so on
+		 */
+		for (int i = 0; i < ranks.length; i++) {
+			for (int j = 0; j < suit.length; j++) {
+				deck[suit.length * i + j] = ranks[i] + " " + suit[j];
 
-        // initialize deck i.e total number of cards 4*13=52
-        int n = suit.length * ranks.length;
-        String[] deck = new String[n];
-        
-        for (int i = 0; i < ranks.length; i++) {
-            for (int j = 0; j < suit.length; j++) {
-                deck[suit.length*i + j] = ranks[i] + " of " + suit[j];
-            }
-        }
+			}
+		}
+		/*// print deck print:
+		for (int j = 0; j < deck.length; j++) {
+			System.out.println(" " + deck[j]);
+		}*/
+		// shuffle cards n=52
+		for (int i = 0; i < 52; i++) {
+			int r = i + (int) (Math.random() * (52 - i));
+			String temp = deck[r];
+			deck[r] = deck[i];
+			deck[i] = temp;
+		}
 
-        // shuffle
-        for (int i = 0; i < n; i++) {
-            int r = i + (int) (Math.random() * (n-i));
-            String temp = deck[r];
-            deck[r] = deck[i];
-            deck[i] = temp;
-        }
+		/* shuffeled cards: */
+		/*System.out.println("shuffeld cards are:");
+		for (int i = 0; i < n; i++) {
+			System.out.println(deck[i]);
+		}
+*/
+		return deck;
+	}
 
-        // print shuffled deck
-       /* for (int i = 0; i < n; i++) {
-            System.out.println(deck[i]);
-        }*/
-        return deck;
-    }
 	public static double valueOf(String[] name, String[] symbol, int[] share, double[] value, double[] total) {
 		for (int i = 0; i < name.length; i++) {
 			total[i] = share[i] * value[i];
-			System.out.println(
-					"Total value for Stock " + (i + 1) + " is: " + total[i] + " Rs. symbol: " + symbol[i]);
+			System.out.println("Total value for Stock " + (i + 1) + " is: " + total[i] + " Rs. symbol: " + symbol[i]);
 		}
-		double allTotal=0;
+		double allTotal = 0;
 		for (int i = 0; i < total.length; i++) {
-			 allTotal = allTotal + total[i];
+			allTotal = allTotal + total[i];
 		}
 		System.out.println("\nTotal value of all  " + total.length + " stock is " + allTotal + " Rs");
 		return allTotal;
 	}
+
+	public static List sort(String string) {
+
+		return null;
+	}
+/**
+ * @param shuffelDeck String[]
+ * @return String [][]
+ * <p>take shuffeled cards and dristrubute 9 cards to 4 players
+ * <p>and returns 2D[4][9] matrix
+ * 
+ */
+	public static String[][] getCardToPlayer(String[] shuffelDeck) {
+		// divide 9 card to each 4 player
+		String players[][] = new String[4][9];
+		int a = 0;
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 9; j++) {
+				players[i][j] = shuffelDeck[a];
+				a++;
+			}
+
+		}
+		return players;
+	}
+/**
+ * @param player String[][]
+ * <p>print cards of player
+ */
+	public static void printCardOfPlayer(String[][] player) {
+		// print 9 cards of 4 player
+		
+		
+		for (int i = 0; i < 4; i++) {
+			System.out.printf("player" + (i + 1) + " : ");
+			for (int j = 0; j < 9; j++) {	
+				System.out.print("  " + player[i][j] + "  ");
+			}
+			System.out.println();
+
+		}
+	}
+
+
 }
