@@ -1,140 +1,185 @@
-/*************************************************
- *@author:Patil Ragini
- *@version: 1.8
- *@since: 19-08-2017
- *Purpose: create my link list to insert display linklist 
- **************************************************/
-
 package com.bridgelabz.utility;
 
-import java.util.Scanner;
-class Node
-{
-    protected String data;
-    protected Node link;
+public class MyLinkedList<T> {
+	Node<T> head;
+	Node<T> current;
+	int position;
 
-    public Node()
-    {
-        link = null;
-        data = null;
-    }    
-    public Node(String d,Node n)
-    {
-        data = d;
-        link = n;
-    }    
-     public void setLink(Node n)
-    {
-        link = n;
-    }    
-     public void setData(String d)
-    {
-        data = d;
-    }    
-       public Node getLink()
-    {
-        return link;
-    }    
-     public String getData()
-    {
-        return data;
-    }
-}
-class linkedList
-{
-    protected Node start;
-    protected Node end ;
-    public int size ;
- 
-  
-    public linkedList()
-    {
-        start = null;
-        end = null;
-        size = 0;
-    }
-    public boolean isEmpty()
-    {
-        return start == null;
-    }
-    public int getSize()
-    {
-        return size;
-    }    
-    
-    public void insertAtEnd(String val)
-    {
-        Node nptr = new Node(val,null);    
-        size++ ;    
-        if(start == null) 
-        {
-            start = nptr;
-            end = start;
-        }
-        else 
-        {
-            end.setLink(nptr);
-            end = nptr;
-        }
-    }
-   
-    public void display()
-    {
-        System.out.print("\nSingly Linked List = ");
-        if (size == 0) 
-        {
-            System.out.print("empty\n");
-            return;
-        }    
-        if (start.getLink() == null) 
-        {
-            System.out.println(start.getData() );
-            return;
-        }
-        Node ptr = start;
-        System.out.print(start.getData()+ "->");
-        ptr = start.getLink();
-        while (ptr.getLink() != null)
-        {
-            System.out.print(ptr.getData()+ "->");
-            ptr = ptr.getLink();
-        }
-        System.out.print(ptr.getData()+ "\n");
-    }
-}
-public class MyLinkedList
-{    
-    public static void main(String[] args)
-    {             
-        Scanner scanner = new Scanner(System.in);
-        linkedList list = new linkedList(); 
-        System.out.println("Singly Linked List Test\n");          
-        char ch;
-        do
-        {
-            System.out.println("1. get size\n 2 insert at end\n 3display");            
-            int choice = scanner.nextInt();            
-            switch (choice)
-            {      
-            case 1 : 
-                System.out.println("Size = "+ list.getSize() +" \n");
-                break; 
-            case 2 : 
-                System.out.println("Enter integer element to insert");
-                list.insertAtEnd( scanner.next() );                     
-                break;  
-            case 3:
-            	list.display();
-                break;
-                                    
-             default : 
-                System.out.println("Wrong Entry \n ");
-                break;   
-            }
-            list.display();
-            System.out.println("\nDo you want to continue y/n) \n");
-            ch = scanner.next().charAt(0);                        
-        } while (ch == 'Y'|| ch == 'y');             
-        scanner.close();
-    }
+	public MyLinkedList() {
+		head = null;
+		current = null;
+		position = -1;
+	}
+
+	public void list() {
+		Node<T> tempCurrent = head;
+		while (tempCurrent != null) {
+			System.out.println(tempCurrent.data);
+			tempCurrent = tempCurrent.next;
+		}
+	}
+
+	/**
+	 * adds element to the list at end of the list
+	 */
+	public void add(T data) {
+		Node<T> node = new Node<T>(data);
+		if (head == null) {
+			head = node;
+			current = head;
+		} else {
+			current.next = node;
+			current = current.next;
+		}
+		position++;
+	}
+
+	/**
+	 * removes given element from the list
+	 */
+	public void remove(T data) {
+		Node<T> tempCurrent = head;
+		Node<T> tempPrev = null;
+		while (!tempCurrent.data.equals(data)) {
+			tempPrev = tempCurrent;
+			tempCurrent = tempCurrent.next;
+		}
+		if (tempCurrent == head) {
+			head = head.next;
+		} else {
+			tempPrev.next = tempCurrent.next;
+		}
+		if (tempCurrent == current) {
+			current = tempPrev;
+		}
+		position--;
+	}
+
+	/**
+	 * @returns true if the element is in the list else returns false
+	 */
+	public boolean search(T data) {
+		return index(data) == -1 ? false : true;
+	}
+
+	/**
+	 * @returns true if the list is empty else returns false
+	 */
+	public boolean isEmpty() {
+		return position == -1 ? true : false;
+	}
+
+	/**
+	 * @returns size(number of elements) of the list
+	 */
+	public int size() {
+		return position + 1;
+	}
+
+	/**
+	 * adds data to the end of the list
+	 */
+	public void append(T data) {
+		add(data);
+	}
+
+	/**
+	 * position of the element in the list if it is in the list else returns -1
+	 */
+	public int index(T data) {
+		if (position == -1) {
+			return -1;
+		}
+		Node<T> tempCurrent = head;
+		int tempPosition = 0;
+
+		while (!tempCurrent.data.equals(data)) {
+			if (tempCurrent == current) {
+				return -1;
+			}
+			tempCurrent = tempCurrent.next;
+			tempPosition++;
+		}
+		return tempPosition;
+	}
+
+	/**
+	 * @param pos
+	 *            , data- inserts element 'data' at 'pos' position
+	 */
+	public void insert(int pos, T data) {
+
+		if ((pos == position + 1) || (position == -1)) {
+			add(data);
+		} else if (pos == 0) {
+			Node<T> tempNode = head;
+			head = new Node<T>(data);
+			head.next = tempNode;
+		} else {
+			Node<T> tempCurrent = head;
+			Node<T> tempPrev = null;
+			int tempPosition = 0;
+			while (tempPosition <= pos + 1) {
+				tempPrev = tempCurrent;
+				tempCurrent = tempCurrent.next;
+				tempPosition++;
+			}
+			Node<T> newNode = new Node<T>(data);
+			newNode.next = tempCurrent;
+			tempPrev.next = newNode;
+		}
+		position++;
+	}
+
+	/**
+	 * @return pops and returns last element in the list
+	 */
+	public T pop() {
+		return pop(position);
+	}
+
+	/**
+	 * @param location
+	 *            - pops elements at given location
+	 * @returns element popped
+	 */
+	public T pop(int location) {
+		Node<T> tempCurrent = head;
+		Node<T> tempPrev = null;
+		int tempPosition = 0;
+		position--;
+		while (tempPosition != location) {
+			tempPrev = tempCurrent;
+			tempCurrent = tempCurrent.next;
+			tempPosition++;
+		}
+		if (tempCurrent == head) {
+			head = head.next;
+			return tempCurrent.data;
+		} else if (tempCurrent == current) {
+			current = tempPrev;
+			tempPrev.next = tempCurrent.next;
+			return tempCurrent.data;
+		} else {
+			tempPrev.next = tempCurrent.next;
+			return tempCurrent.data;
+		}
+	}
+
+	/**
+	 * @param location
+	 * @returns object of given location
+	 */
+	public T get(int location) {
+		Node<T> tempCurrent = head;
+		int tempPosition = 0;
+
+		while (tempPosition != location) {
+			tempCurrent = tempCurrent.next;
+			tempPosition++;
+		}
+
+		return tempCurrent.data;
+
+	}
 }

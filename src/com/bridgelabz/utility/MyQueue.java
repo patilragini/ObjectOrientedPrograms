@@ -1,4 +1,5 @@
 package com.bridgelabz.utility;
+
 import java.util.Vector;
 public class MyQueue<E> {
 
@@ -39,8 +40,8 @@ public class MyQueue<E> {
 		}
 		return queue.get(front++);				
 	}		
-	 public E peek() {
-	        return elements.getFirst();
-	    }
+	/* public E peek() {
+	        return ((Object) queue).getFirst();
+	    }*/
 
 }
