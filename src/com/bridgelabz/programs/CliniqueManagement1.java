@@ -2,15 +2,14 @@ package com.bridgelabz.programs;
 
 import java.util.Scanner;
 
-import com.bridgelabz.utility.Utility1;
+
 
 import com.bridgelabz.utility.Utility;
 
 public class CliniqueManagement1 {
 
 	private static String doctorReg = "/home/bridgeit/raginiWorkspace/HospitalDetails/Doctor/Doctor.json";
-	private static String patientReg = "/home/bridgeit/raginiWorkspace/HospitalDetails/Patient/Patient.json";
-
+	
 	public static void main(String[] args) {
 		// CliniqueManagement1 cm=new CliniqueManagement1();
 		char again;
@@ -67,12 +66,13 @@ public class CliniqueManagement1 {
 				default:
 					System.out.println("invalid choice!!!");
 				}
-				System.out.println("do you wntto go main menu?");
+				System.out.println("do you want to go main menu y/n :");
 				again = scanner.next().charAt(0);
 			} while (again == 'y' || again == 'Y');
 
 		} catch (Exception e) {
 			System.out.println("invalid !!!");
 		}
+		scanner.close();
 	}
 }

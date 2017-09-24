@@ -1,7 +1,8 @@
-package com.bridgelabz.utility;
+package com.bridgelabz.programs;
 
 class Node<T> {
 	T data;
+	@SuppressWarnings("rawtypes")
 	Node next;
 
 	public Node(T data) {
@@ -11,12 +12,12 @@ class Node<T> {
 
 }
 
-public class MyLinkedList1<T> {
+public class MyLinkedList<T> {
 	Node<T> root;
 	Node<T> end;
 	int size;
 
-	public void MyLinkedList1() {
+	public MyLinkedList() {
 		root = null;
 		end = null;
 		size = 0;
@@ -35,6 +36,7 @@ public class MyLinkedList1<T> {
 		}
 		size++;
 	}
+	@SuppressWarnings("unchecked")
 	public void removeAt(int pos){
 		int tempPos=0;
 		Node<T> tempPrev=root; 
@@ -64,6 +66,7 @@ public class MyLinkedList1<T> {
 		}
 		
 	}
+	@SuppressWarnings("unchecked")
 	public void remove(T data) {
 		Node<T> tempCurrent = root;
 		Node<T> tempPrev = root;
@@ -92,6 +95,7 @@ public class MyLinkedList1<T> {
 	}
 
 
+	@SuppressWarnings("rawtypes")
 	public int size() {
 		Node temp = root;
 		int size = 0;
@@ -136,6 +140,7 @@ public class MyLinkedList1<T> {
 		}
 		return index;
 	}
+	@SuppressWarnings("unchecked")
 	public T get(int index){
 		Node<T> tempCurrent=new Node(null);
 		if(index>=0 && index<this.size()){
@@ -161,6 +166,7 @@ public class MyLinkedList1<T> {
 		return tempData;
 		
 	}
+	@SuppressWarnings("unchecked")
 	public void printList(){
 		Node<T> temp=root;
 		while(temp!=null){

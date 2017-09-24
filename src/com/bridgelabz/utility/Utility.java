@@ -6,6 +6,8 @@
  **************************************************/
 package com.bridgelabz.utility;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -68,9 +70,9 @@ public class Utility {
 				float weight = scanner.nextFloat();
 				System.out.println("Price");
 				float price = scanner.nextFloat();
-				item.put("Name", name);
-				item.put("weight", weight);
-				item.put("price", price);
+				item.put("Name ", name);
+				item.put("weight  ", weight);
+				item.put("price  ", price);
 				inventory.add(item);
 			}
 			try (FileWriter file = new FileWriter("/home/bridgeit/Desktop/abc.json")) {
@@ -98,7 +100,9 @@ public class Utility {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void displayJsonObject(JSONObject object) {
+		@SuppressWarnings("rawtypes")
 		Set keyList = object.keySet();
 		String[] keys = (String[]) keyList.toArray(new String[keyList.size()]);
 		for (int i = 0; i < keys.length; i++) {
@@ -454,20 +458,32 @@ public class Utility {
 
 	}
 
-	public static JSONArray readJSONArray(String file) {
-		JSONParser jsonParser = new JSONParser();
-		FileReader reader;
-		JSONArray jsonObject = new JSONArray();
-		try {
-			reader = new FileReader(file);
-			jsonObject = (JSONArray) jsonParser.parse(reader);
-			reader.close();
-		} catch (IOException | ParseException e) {
-			e.printStackTrace();
-		}
-		return jsonObject;
-
-	}
+	/*
+	 * public static JSONArray readJSONArray(String file) { JSONParser
+	 * jsonParser = new JSONParser(); FileReader reader; JSONArray jsonObject =
+	 * new JSONArray(); try { reader = new FileReader(file); jsonObject =
+	 * (JSONArray) jsonParser.parse(reader); reader.close(); } catch
+	 * (IOException | ParseException e) { e.printStackTrace(); } return
+	 * jsonObject;
+	 * 
+	 * }
+	 */
+	/*
+	 * public static String[] readFile(String filePath) { String words[] = {};
+	 * ArrayList<String> lines = new ArrayList<String>(); String line, temp[] =
+	 * {}; BufferedReader bufferedReader; FileReader file; try { file = new
+	 * FileReader(filePath); bufferedReader = new BufferedReader(file); while
+	 * ((line = bufferedReader.readLine()) != null) { temp =
+	 * line.split(",|\\s"); for (int i = 0; i < temp.length; i++) {
+	 * lines.add(temp[i]);
+	 * 
+	 * } } words = lines.toArray(new String[lines.size()]);
+	 * bufferedReader.close(); } catch (IOException e) {
+	 * 
+	 * e.printStackTrace(); }
+	 * 
+	 * return words; }
+	 */
 
 	@SuppressWarnings("unchecked")
 	public static void addRecord(String file) throws IOException, ParseException {
@@ -498,9 +514,11 @@ public class Utility {
 		bookRecords.add(record);
 		Utility.writeJSONFile(file, bookRecords);
 		System.out.println("Record Added");
+		scanner.close();
 	}
 
 	public static void deleteRecord(String file) throws IOException, ParseException {
+		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
 		JSONArray bookRecords = Utility.readJSONArray("//home/bridgeit/Desktop/AddressBook.json");
 		System.out.println("Enter First name to delete record");
@@ -516,6 +534,7 @@ public class Utility {
 
 		}
 		System.out.println("Name not found!!!");
+		scanner.close();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -555,6 +574,7 @@ public class Utility {
 
 	@SuppressWarnings("unchecked")
 	public static void enterDoctor(String doctorFile) {
+		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
 		JSONObject doctor = new JSONObject();
 		String keys[] = { "Name", "Id", "Specilization", "Availability" };
@@ -577,6 +597,7 @@ public class Utility {
 	 *            search doctor by name id specializatrion availablity
 	 */
 	public static void searchDoctor(String doctorFile) {
+		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
 
 		String searchBy[] = { "Name", "Id", "Specilization", "Availability" };
@@ -588,6 +609,7 @@ public class Utility {
 		JSONArray doctorList = readJSONArray(doctorFile);
 		int presentAtIndex = isPresent(doctorList, searchBy[choice - 1], valueToSearch);
 		if ((presentAtIndex) >= 0) {
+			System.out.println("sdlnjdsndnd");
 			JSONObject doctor = (JSONObject) doctorList.get(presentAtIndex);
 			displayJsonObject(doctor);
 		} else {
@@ -596,9 +618,11 @@ public class Utility {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void takeAppointment() {
 		String doctorFile = "/home/bridgeit/raginiWorkspace/HospitalDetails/Doctor/Doctor.json";
 		String patientFile = "/home/bridgeit/raginiWorkspace/HospitalDetails/Patient/Patient.json";
+		@SuppressWarnings("resource")
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("enter name of doctor  you want to take appointment");
 		String name = scanner.next();
@@ -629,6 +653,7 @@ public class Utility {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	private static JSONArray getPatientDetials(JSONArray patientList) {
 		Scanner scanner = new Scanner(System.in);
 		JSONObject patient = new JSONObject();
@@ -642,6 +667,7 @@ public class Utility {
 		}
 		patientList.add(patient);
 		System.out.println("done enroll!!!");
+		scanner.close();
 		return patientList;
 	}
 
@@ -662,9 +688,101 @@ public class Utility {
 			} else {
 				System.out.println("Patient not found!!!");
 			}
+			scanner.close();
 		} catch (Exception e) {
 			System.out.println("not found!!!");
 		}
+	}
+
+	/*
+	 * public static int isPresent(JSONArray doctorList, String key, String
+	 * valueToSearch) { int presentAt = -1; for (int index = 0; index <
+	 * doctorList.size(); index++) { JSONObject doctor = (JSONObject)
+	 * doctorList.get(index); //compare if (((String)
+	 * doctor.get(key)).equalsIgnoreCase(valueToSearch)) { presentAt = index;
+	 * break; } } return presentAt; }
+	 */
+
+	public static JSONObject readJSONObj(String file) {
+		JSONParser jsonParser = new JSONParser();
+		FileReader reader;
+		JSONObject jsonObject = new JSONObject();
+		try {
+			reader = new FileReader(file);
+			jsonObject = (JSONObject) jsonParser.parse(reader);
+			reader.close();
+		} catch (IOException | ParseException e) {
+			e.printStackTrace();
+		}
+		return jsonObject;
+
+	}
+
+	/**
+	 * @param filePath
+	 *            String
+	 * @return string[]
+	 *         <p>
+	 *         reads file
+	 */
+	public static String[] readFile(String filePath) {
+		String words[] = {};
+		ArrayList<String> lines = new ArrayList<String>();
+		String line, temp[] = {};
+		BufferedReader bufferedReader;
+		FileReader file;
+		try {
+			file = new FileReader(filePath);
+			bufferedReader = new BufferedReader(file);
+			while ((line = bufferedReader.readLine()) != null) {
+				temp = line.split(",|\\s");
+				for (int i = 0; i < temp.length; i++) {
+					lines.add(temp[i]);
+
+				}
+			}
+			words = lines.toArray(new String[lines.size()]);
+			bufferedReader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return words;
+	}
+
+	public static void writeFile(String word[], String filePath) {
+
+		try {
+			FileWriter writer = new FileWriter(filePath, false);
+			PrintWriter out = new PrintWriter(writer);
+			for (int i = 0; i < word.length; i++) {
+				out.write(word[i] + " ");
+			}
+			out.close();
+			writer.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("error!!!");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("error!!!");
+			e.printStackTrace();
+		}
+	}
+
+	public static JSONArray readJSONArray(String file) {
+		JSONParser jsonParser = new JSONParser();
+		FileReader reader;
+		JSONArray jsonObject = new JSONArray();
+		try {
+			reader = new FileReader(file);
+			jsonObject = (JSONArray) jsonParser.parse(reader);
+			reader.close();
+		} catch (IOException e) {
+			((Throwable) e).printStackTrace();
+		} catch (org.json.simple.parser.ParseException e) {
+			e.printStackTrace();
+		}
+		return jsonObject;
 
 	}
 
@@ -672,8 +790,7 @@ public class Utility {
 		int presentAt = -1;
 		for (int index = 0; index < doctorList.size(); index++) {
 			JSONObject doctor = (JSONObject) doctorList.get(index);
-			//compare
-			if (((String) doctor.get(key)).equalsIgnoreCase(valueToSearch)) {
+			if (doctor.get(key).equals(valueToSearch)) {
 				presentAt = index;
 				break;
 			}
@@ -681,4 +798,14 @@ public class Utility {
 		return presentAt;
 	}
 
+	public static void displayJson(JSONObject object) {
+		@SuppressWarnings("rawtypes")
+		Set keyList = object.keySet();
+		@SuppressWarnings("unchecked")
+		String[] keys = (String[]) keyList.toArray(new String[keyList.size()]);
+		for (int i = 0; i < keys.length; i++) {
+			System.out.println(keys[i] + "=" + object.get(keys[i]));
+		}
+		System.out.println("================");
+	}
 }
